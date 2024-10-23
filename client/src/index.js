@@ -4,6 +4,7 @@ const http = require('http');
 const fs = require('fs');
 const net = require('net');
 const { spawn } = require('child_process');
+const path = require('path');
 
 const sshConfig = {
   host: '172.207.80.203',
@@ -16,7 +17,7 @@ const sshConfig = {
 };
 
 const main = () => {
-  child = spawn('echo', [sshConfig.privateKeyString, '|','ssh', '-fND', 1080, '-i', '-', sshConfig.username + "@" + sshConfig.host]);
+  child = spawn('ssh', ['-fND', 1080, '-i', path.join(__dirname, '.ssh', 'id_ed25519'), sshConfig.username + "@" + sshConfig.host]);
   setTimeout(function() {
     console.log('****secret****');
     child.stdin.write(sshConfig.passphrase);
