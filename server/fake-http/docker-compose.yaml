@@ -1,0 +1,5 @@
+services:
+  haproxy:
+    
+  dummy-web:
+    image: 
