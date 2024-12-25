@@ -12,16 +12,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up PowerShell
-      uses: actions/setup-powershell@v1
-
-    - name: Run build script
-      run: pwsh ./client/windows/build.ps1
-      env:
-        appVersion: ${{ github.ref_name }}
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
@@ -37,10 +31,12 @@ jobs:
       run: |
         Get-ChildItem -Path .
 
-    - name: Compile Inno Setup
+    - name: Run build script
       run: |
-        iscc.exe '/SMySignTool=.\signtool.exe sign /v /f $qD:\a\anytun\anytun\GitHubActionsWorkflow.pfx$q /p ${{ secrets.Pfx_Passphrase }} /t http://timestamp.comodoca.com/authenticode /fd SHA256 $p' client/windows/installer.iss
+        ./client/windows/BuildCI.ps1
+        
       env:
+        appVersion: ${{ github.ref_name }}
         Configuration: ${{ matrix.configuration }}
 
     # Remove the pfx
