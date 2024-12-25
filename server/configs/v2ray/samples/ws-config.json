@@ -1,0 +1,52 @@
+{
+  "log" : {
+    "loglevel": "debug"
+  },
+  "inbounds": [
+    {
+      "port": 80, // Recommand 80 port for bypass GFW
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "<reducted>",
+            "level": 1,
+            "alterId": 0
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/ws"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
+  "routing": {
+    "strategy": "rules",
+    "settings": {
+      "rules": [
+        {
+          "type": "field",
+          "ip": [
+            "geoip:private"
+          ],
+          "outboundTag": "blocked"
+        }
+
+      ]
+    }
+  }
+}

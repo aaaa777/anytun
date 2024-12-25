@@ -1,0 +1,33 @@
+{
+    "log": {
+      "loglevel": "debug"
+    },
+    "inbounds": [
+      {
+        "protocol": "dokodemo-door"
+      }
+    ],
+    "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "type": "field",
+          "ip": [
+            "192.0.2.1"
+          ],
+          "domain": [
+            "example.com"
+          ],
+          "outboundTag": "direct"
+        }
+      ]
+    },
+    "outbounds": [
+      {
+        "tag": "direct",
+        "protocol": "freedom",
+        "settings": {}
+      }
+    ]
+  }
+  

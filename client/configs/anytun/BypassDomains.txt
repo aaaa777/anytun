@@ -1,0 +1,98 @@
+# このファイルではAnytunでバイパスするドメインを記述します
+#
+# !!!注意点!!!
+#
+# 同じドメインを別行に記述すると動かなくなるバグがあります
+#
+# サブドメインやサブドメインのサブドメインも勝手にバイパスします
+# 例えばexample.comと記述するとwww.example.comもabc.example.comもバイパス対象になります
+#  
+# コメントは行頭の#で記述できます
+# 行の途中からコメントを書くことはできません
+# NG: example.com # テスト用
+# NG: example.com # テスト用
+# OK: # テスト用
+#   : example.com
+
+# discord
+dis.gd
+discord.com
+discord.design
+discord.dev
+discord.gg
+discord.gift
+discord.gifts 
+discord.media 
+discord.new 
+discord.store 
+discord.tools 
+discord-activities.com
+discordactivities.com 
+discordapp.com
+discordapp.net
+discordmerch.com
+discordpartygames.com 
+discordsays.com 
+discordstatus.com 
+airhorn.solutions 
+airhornbot.com
+bigbeans.solutions
+watchanimeattheoffice.com 
+discordapp.io 
+discordcdn.com
+
+# twitter
+x.com
+t.co
+ads-twitter.com
+cms-twdigitalassets.com
+periscope.tv
+pscp.tv
+tellapart.com
+tweetdeck.com
+twimg.com
+twitpic.com
+twitter.biz
+twitter.com
+twitter.jp
+twittercommunity.com
+twitterflightschool.com
+twitterinc.com
+twitteroauth.com
+twitterstat.us
+twtrdns.net
+twttr.com
+twttr.net
+twvid.com
+vine.co
+
+# github codespace
+rel.tunnels.api.visualstudio.com
+assets.github.dev
+
+# github copilot
+github.com
+githubusercontent.com
+copilot-proxy.githubusercontent.com
+origin-tracker.githubusercontent.com
+githubcopilot.com
+v1.telemetry.coder.com
+default.exp-tas.com
+westus-0.in.applicationinsights.azure.com
+mobile.events.data.microsoft.com
+
+# niconico
+nicovideo.jp
+nimg.jp
+
+# 2ch
+5ch.net
+2ch.sc
+
+# AOL
+aol.com
+aol.jp
+
+# others
+internetbadguys.com
+yourclip.life

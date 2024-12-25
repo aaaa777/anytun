@@ -1,0 +1,12 @@
+// Anytunの設定ファイル
+// not implemented yet
+
+{
+    "version": 1,
+    "trigger_type": "SSID",
+    "trigger_ssid": "HIU_WiFi",
+    "allowed_dns_server": "10.10.1.201",
+    "gateway_server_url": "<reducted>",
+    "gateway_server_id": "<reducted>",
+    "gateway_server_list": "https://anytun.example.com/update"
+}

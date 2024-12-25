@@ -1,0 +1,235 @@
+// Config file of V2Ray. This file follows standard JSON format, with comments support.
+// Uncomment entries below to satisfy your needs. Also read our manual for more detail at
+// https://www.v2ray.com/
+{
+  "log": {
+    "loglevel": "warning"
+  },
+
+  "inbounds": [
+    {
+      "port": 3002,
+      "listen": "127.0.0.1",
+      "tag": "socks-inbound",
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "ip": "127.0.0.1"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    }
+  ],
+
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "streamSettings": {
+        "socketSettings": {
+          "bindToDevice": "Wi-Fi"
+        }
+      },
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            // "address": "<reducted>",
+            "address": "<reducted>",
+            "port": 443,
+            // "port": 80,
+            "users": [
+              {
+                "id": "<reducted>",
+                "alterId": 0
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        // "security": "none",
+        "wsSettings": {
+          "path": "/ws"
+        },
+        "tlsSettings": {
+          // "serverName": "<reducted>",
+          "serverName": "<reducted>",
+          "allowInsecure": true
+        },
+        "sockopt": {
+          "bindToDevice": "Wi-Fi"
+        }
+      },
+      "tag": "oc-proxy"
+    }
+  ],
+
+  // Transport is for global transport settings. If you have multiple transports with same settings
+  // (say mKCP), you may put it here, instead of in each individual inbound/outbounds.
+  //"transport": {},
+
+  // Routing controls how traffic from inbounds are sent to outbounds.
+  "routing": {
+    "domainStrategy": "IPOnDemand",
+    "rules":[
+      {
+        "type": "field",
+        "domain": [
+          // "geosite:discord",
+          "dis.gd",
+          "discord.co",
+          "domain:discord.com",
+          "discord.design",
+          "discord.dev",
+          "discord.gg",
+          "discord.gift",
+          "discord.gifts ",
+          "discord.media ",
+          "discord.new ",
+          "discord.store ",
+          "discord.tools ",
+          "discord-activities.com",
+          "discordactivities.com ",
+          "discordapp.com",
+          "discordapp.net",
+          "discordmerch.com",
+          "discordpartygames.com ",
+          "discordsays.com ",
+          "discordstatus.com ",
+          "airhorn.solutions ",
+          "airhornbot.com",
+          "bigbeans.solutions",
+          "watchanimeattheoffice.com ",
+          "discordapp.io ",
+          "discordcdn.com",
+          // "geosite:twitter",
+          "pbs.twimg.com",
+          "abs.twimg.com",
+          "api.x.com",
+          "ads-twitter.com",
+          "cms-twdigitalassets.com",
+          "periscope.tv",
+          "pscp.tv",
+          "t.co",
+          "tellapart.com",
+          "tweetdeck.com",
+          "twimg.com",
+          "twitpic.com",
+          "twitter.biz",
+          "twitter.com",
+          "twitter.jp",
+          "twittercommunity.com",
+          "twitterflightschool.com",
+          "twitterinc.com",
+          "twitteroauth.com",
+          "twitterstat.us",
+          "twtrdns.net",
+          "twttr.com",
+          "twttr.net",
+          "twvid.com",
+          "vine.co",
+          "x.com",
+          // github codespace
+          "asse.rel.tunnels.api.visualstudio.com",
+          "asse-data.rel.tunnels.api.visualstudio.com",
+          "assets.github.dev",
+          // github copilot
+          "github.com",
+          "api.github.com",
+          "copilot-telemetry.githubusercontent.com",
+          "default.exp-tas.com",
+          "copilot-proxy.githubusercontent.com",
+          "origin-tracker.githubusercontent.com",
+          "domain:githubcopilot.com",
+          "api.githubcopilot.com",
+          "github.com",
+          "v1.telemetry.coder.com",
+          "default.exp-tas.com",
+          "copilot-proxy.githubusercontent.com",
+          "westus-0.in.applicationinsights.azure.com",
+          "mobile.events.data.microsoft.com",
+          // others
+          "domain:nicovideo.jp",
+          "domain:internetbadguys.com",
+          "yourclip.life"
+        ],
+        "outboundTag": "oc-proxy"
+      },
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:do-johodai.ac.jp",
+          "domain:nakajun.net"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "8.8.8.8"
+        ],
+        "port": "53",
+        "protocol": "udp,tcp",
+        "outboundTag": "oc-proxy"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads"
+        ],
+        "outboundTag": "blocked"
+      }
+    ]
+  },
+
+  // Dns settings for domain resolution.
+  "dns": {
+    // Static hosts, similar to hosts file.
+    "hosts": {
+      "domain:shadowsocks.org": "electronicsrealm.com"
+    },
+    "servers": [
+      {
+        "address": "localhost",
+        "port": 53
+      }
+    ]
+  },
+
+  // Policy controls some internal behavior of how V2Ray handles connections.
+  // It may be on connection level by user levels in 'levels', or global settings in 'system.'
+  "policy": {
+    // Connection policys by user levels
+    "levels": {
+      "0": {
+        "uplinkOnly": 0,
+        "downlinkOnly": 0
+      }
+    },
+    "system": {
+      "statsInboundUplink": false,
+      "statsInboundDownlink": false,
+      "statsOutboundUplink": false,
+      "statsOutboundDownlink": false
+    }
+  }
+}

@@ -1,0 +1,144 @@
+// Config file of V2Ray. This file follows standard JSON format, with comments support.
+// Uncomment entries below to satisfy your needs. Also read our manual for more detail at
+// https://www.v2ray.com/
+{
+  "log": {
+    "loglevel": "warning"
+  },
+
+  "inbounds": [{
+    "port": 3002,
+    "listen": "127.0.0.1",
+    "tag": "socks-inbound",
+    "protocol": "socks",
+    "settings": {
+      "auth": "noauth",
+      "udp": true,
+      "ip": "127.0.0.1"
+    },
+    "sniffing": {
+      "enabled": true,
+      "destOverride": ["http", "tls"]
+    }
+  }],
+
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<reducted>",
+            "port": 443,
+            // "port": 80,
+            "users": [
+              {
+                "id": "<reducted>",
+                "alterId": 0
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "h2",
+        "security": "tls",
+        // "security": "none",
+        "httpSettings": {
+          "path": "/h2"
+        },
+        "tlsSettings": {
+          "serverName": "<reducted>",
+          "allowInsecure": true
+        }
+      },
+      "tag": "oc-proxy"
+    }
+  ],
+
+  // Transport is for global transport settings. If you have multiple transports with same settings
+  // (say mKCP), you may put it here, instead of in each individual inbound/outbounds.
+  //"transport": {},
+
+  // Routing controls how traffic from inbounds are sent to outbounds.
+  "routing": {
+    "domainStrategy": "IPOnDemand",
+    "rules":[
+      {
+        "type": "field",
+        "domain": [
+          "geosite:discord",
+          "geosite:twitter",
+          "twimg.com",
+          "pbs.twimg.com",
+          "abs.twimg.com",
+          "api.x.com",
+          "x.com",
+          "asse.rel.tunnels.api.visualstudio.com",
+          "asse-data.rel.tunnels.api.visualstudio.com",
+          "assets.github.dev"
+        ],
+        "outboundTag": "oc-proxy"
+      },
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:do-johodai.ac.jp",
+          "domain:nakajun.net"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads"
+        ],
+        "outboundTag": "blocked"
+      }
+    ]
+  },
+
+  // Dns settings for domain resolution.
+  "dns": {
+    // Static hosts, similar to hosts file.
+    "hosts": {
+      "domain:shadowsocks.org": "electronicsrealm.com"
+    },
+    "servers": [
+      "localhost"
+    ]
+  },
+
+  // Policy controls some internal behavior of how V2Ray handles connections.
+  // It may be on connection level by user levels in 'levels', or global settings in 'system.'
+  "policy": {
+    // Connection policys by user levels
+    "levels": {
+      "0": {
+        "uplinkOnly": 0,
+        "downlinkOnly": 0
+      }
+    },
+    "system": {
+      "statsInboundUplink": false,
+      "statsInboundDownlink": false,
+      "statsOutboundUplink": false,
+      "statsOutboundDownlink": false
+    }
+  }
+}

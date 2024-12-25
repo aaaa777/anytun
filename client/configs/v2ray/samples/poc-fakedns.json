@@ -1,0 +1,45 @@
+{
+  "log": {
+    "loglevel": "debug"
+  },
+  "inbounds": [
+    {
+      "port": 7753,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "network": "tcp,udp",
+        "address": "fakedns",
+        "followRedirect": false
+      },
+      "tag": "dns-in"
+    }
+  ],
+  "dns": {
+    "queryStrategy": "UseIPv4",
+    "servers": [
+      "fakedns"
+    ]
+  },
+  "routing": {
+    "domainStrategy": "IPOnDemand",
+    "domainMatcher": "mph",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": ["dns-in"],
+        "outboundTag": "dns-out"
+      }
+    ]
+  },
+  "outbounds": [
+    // {
+    //   "tag": "block",
+    //   "protocol": "blackhole",
+    //   "settings": {}
+    // },
+    {
+      "tag": "dns-out",
+      "protocol": "dns"
+    }
+  ]
+}

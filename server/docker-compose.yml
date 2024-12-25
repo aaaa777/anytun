@@ -1,0 +1,39 @@
+services:
+  web:
+    image: nginx:alpine
+    container_name: web
+    restart: always
+    volumes:
+      - ./html:/usr/share/nginx/html
+  haproxy:
+    image: haproxy:2.4
+    container_name: haproxy
+    user: root
+    restart: always
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - "80:80"
+  v2ray-ws:
+    image: v2fly/v2fly-core
+    container_name: v2ray
+    restart: always
+    volumes:
+      - ./configs/v2ray/ws-config.json:/etc/v2ray/config.json
+    # ports:
+    #   - "80:80"
+    command: run -config=/etc/v2ray/config.json
+  # v2ray-h2:
+  #   image: v2fly/v2fly-core
+  #   container_name: v2ray
+  #   restart: always
+  #   volumes:
+  #     - ./configs/v2ray/h2-config.json:/etc/v2ray/config.json
+  #   command: run -config=/etc/v2ray/config.json
+  # v2ray-http:
+  #   image: v2fly/v2fly-core
+  #   container_name: v2ray
+  #   restart: always
+  #   volumes:
+  #     - ./configs/v2ray/http-config.json:/etc/v2ray/config.json
+  #   command: run -config=/etc/v2ray/config.json

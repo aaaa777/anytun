@@ -1,0 +1,15 @@
+﻿. {
+    bind 127.0.77.53
+    forward . 10.10.1.201
+    hosts anytun.hosts
+    cache 600
+    log
+}
+
+dis.gd discord.com discord.design discord.dev discord.gg discord.gift discord.gifts discord.media discord.new discord.store discord.tools discord-activities.com discordactivities.com discordapp.com discordapp.net discordmerch.com discordpartygames.com discordsays.com discordstatus.com airhorn.solutions airhornbot.com bigbeans.solutions watchanimeattheoffice.com discordapp.io discordcdn.com x.com t.co ads-twitter.com cms-twdigitalassets.com periscope.tv pscp.tv tellapart.com tweetdeck.com twimg.com twitpic.com twitter.biz twitter.com twitter.jp twittercommunity.com twitterflightschool.com twitterinc.com twitteroauth.com twitterstat.us twtrdns.net twttr.com twttr.net twvid.com vine.co rel.tunnels.api.visualstudio.com assets.github.dev github.com githubusercontent.com copilot-proxy.githubusercontent.com origin-tracker.githubusercontent.com githubcopilot.com v1.telemetry.coder.com default.exp-tas.com westus-0.in.applicationinsights.azure.com mobile.events.data.microsoft.com nicovideo.jp nimg.jp 5ch.net 2ch.sc aol.com aol.jp internetbadguys.com yourclip.life {
+    bind 127.0.77.53
+    forward . 127.0.77.52
+    cache 10
+    log
+}
+

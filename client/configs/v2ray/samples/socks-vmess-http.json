@@ -1,0 +1,211 @@
+// Config file of V2Ray. This file follows standard JSON format, with comments support.
+// Uncomment entries below to satisfy your needs. Also read our manual for more detail at
+// https://www.v2ray.com/
+{
+  "log": {
+    "loglevel": "warning"
+  },
+
+  "inbounds": [{
+    "port": 3002,
+    "listen": "127.0.0.1",
+    "tag": "socks-inbound",
+    "protocol": "socks",
+    "settings": {
+      "auth": "noauth",
+      "udp": true,
+      "ip": "127.0.0.1"
+    },
+    "sniffing": {
+      "enabled": true,
+      "destOverride": ["http", "tls"]
+    }
+  }],
+
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [{
+          "address": "<reducted>",
+          "port": 443,
+          "users": [{
+            "id": "ebc4a168-a6fe-47ce-bc25-6183c6212dcc",
+            "alterId": 0
+          }]
+        }]
+      },
+      "tag": "cf-proxy"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<reducted>",
+            "port": 443,
+            // "port": 80,
+            "users": [
+              {
+                "id": "<reducted>",
+                "alterId": 0
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        // "security": "none",
+        "tcpSettings": {
+          "header": {
+            "type": "http",
+            "request": {
+              "version": "1.1",
+              "method": "GET",
+              "path": "/",
+              "headers": {
+                "Host": ["<reducted>"],
+                "User-Agent": [
+                  "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36",
+                  "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.109 Mobile/14A456 Safari/601.1.46"
+                ],
+                "Accept-Encoding": ["gzip, deflate"],
+                "Connection": ["keep-alive"],
+                "Pragma": "no-cache"
+              }
+            }
+          }
+        },
+        "tlsSettings": {
+          // "allowInsecureIfPinnedPeerCertificate": false,
+          "serverName": "<reducted>",
+          "alpn": ["http/1.1"]
+        }
+      },
+      "tag": "v3-proxy"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<reducted>",
+            // "port": 443,
+            "port": 80,
+            "users": [
+              {
+                "id": "<reducted>",
+                "alterId": 0
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        // "security": "tls",
+        "security": "none",
+        "wsSettings": {
+          "path": "/ws"
+        }
+      },
+      "tag": "oc-proxy"
+    }
+  ],
+
+  // Transport is for global transport settings. If you have multiple transports with same settings
+  // (say mKCP), you may put it here, instead of in each individual inbound/outbounds.
+  //"transport": {},
+
+  // Routing controls how traffic from inbounds are sent to outbounds.
+  "routing": {
+    "domainStrategy": "IPOnDemand",
+    "rules":[
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "domain": [
+          "geosite:cn"
+        ]
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:discord",
+          "geosite:twitter",
+          "abs.twimg.com"
+        ],
+        "outboundTag": "oc-proxy"
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "ip": ["geoip:private"]
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads"
+        ],
+        "outboundTag": "blocked"
+      }
+    ]
+  },
+
+  // Dns settings for domain resolution.
+  "dns": {
+    // Static hosts, similar to hosts file.
+    "hosts": {
+      // Match v2ray.com to another domain on CloudFlare. This domain will be used when querying IPs for v2ray.com.
+      "domain:v2ray.com": "www.vicemc.net",
+
+      // The following settings help to eliminate DNS poisoning in mainland China.
+      // It is safe to comment these out if this is not the case for you.
+      "domain:github.io": "pages.github.com",
+      "domain:wikipedia.org": "www.wikimedia.org",
+      "domain:shadowsocks.org": "electronicsrealm.com"
+    },
+    "servers": [
+      {
+        "address": "8.8.8.8",
+        "port": 53,
+        "domains": [
+          "geosite:discord",
+          "geosite:twitter",
+          "abs.twimg.com"
+        ]
+      },
+      "localhost"
+    ]
+  },
+
+  // Policy controls some internal behavior of how V2Ray handles connections.
+  // It may be on connection level by user levels in 'levels', or global settings in 'system.'
+  "policy": {
+    // Connection policys by user levels
+    "levels": {
+      "0": {
+        "uplinkOnly": 0,
+        "downlinkOnly": 0
+      }
+    },
+    "system": {
+      "statsInboundUplink": false,
+      "statsInboundDownlink": false,
+      "statsOutboundUplink": false,
+      "statsOutboundDownlink": false
+    }
+  }
+}

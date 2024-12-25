@@ -1,2 +1,5 @@
 **/node_modules
-**/.ssh
+!.gitkeep
+# **/.ssh
+anytun-server-list
+config.json

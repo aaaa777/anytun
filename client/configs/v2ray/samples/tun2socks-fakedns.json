@@ -1,0 +1,151 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+
+  "inbounds": [
+    {
+      "tag": "socks-inbound",
+      "protocol": "socks",
+      "listen": "127.0.77.1",
+      "port": 3002,
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "ip": "127.0.77.1"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["fakedns"],
+        "metadataOnly": false
+      }
+    },
+    {
+      "tag": "dns-in",
+      "protocol": "dokodemo-door",
+      "port": 53,
+      "listen": "127.0.77.52",
+      "settings": {
+        "network": "tcp,udp",
+        "address": "fakedns",
+        "followRedirect": false
+      }
+    }
+  ],
+
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    },
+    {
+      "protocol": "dns",
+      "tag": "dns-out"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<reducted>",
+            "port": 443,
+            "users": [
+              {
+                "id": "<reducted>",
+                "alterId": 0
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "wsSettings": {
+          "path": "/ws"
+        },
+        "tlsSettings": {
+          "serverName": "<reducted>",
+          "allowInsecure": true
+        }
+      },
+      "tag": "oc-proxy"
+    }
+  ],
+
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules":[
+      {
+        "type": "field",
+        "inboundTag": ["socks-inbound"],
+        "ip": [
+          "198.19.255.255",
+          "255.255.255.255"
+        ],
+        "outboundTag": "blocked"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["dns-in"],
+        "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["socks-inbound"],
+        "outboundTag": "oc-proxy"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads"
+        ],
+        "outboundTag": "blocked"
+      }
+    ]
+  },
+
+  
+  "dns": {
+    "fakedns": [
+      {
+        "ipPool": "198.18.0.0/16",
+        "poolSize": 65535
+      }
+    ],
+    "hosts": {
+      "domain:shadowsocks.org": "electronicsrealm.com"
+    },
+    "disableCache": false,
+    "disableFallback": false,
+    "disableFallbackIfMatch": false,
+    // "queryStrategy": "UseIPv4",
+    "servers": [
+      "fakedns"
+    ]
+  },
+
+  // Policy controls some internal behavior of how V2Ray handles connections.
+  // It may be on connection level by user levels in 'levels', or global settings in 'system.'
+  "policy": {
+    // Connection policys by user levels
+    "levels": {
+      "0": {
+        "uplinkOnly": 0,
+        "downlinkOnly": 0
+      }
+    },
+    "system": {
+      "statsInboundUplink": false,
+      "statsInboundDownlink": false,
+      "statsOutboundUplink": false,
+      "statsOutboundDownlink": false
+    }
+  }
+}

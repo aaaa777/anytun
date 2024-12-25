@@ -1,0 +1,4 @@
+# このファイルはAnytunのみで利用するHostsファイルです
+# Anytunが起動していない時は参照されません
+10.20.50.163    genbu
+1.2.3.4         suki.na.domain
