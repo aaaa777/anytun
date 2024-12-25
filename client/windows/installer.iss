@@ -7,7 +7,7 @@
 
 #define MyAppName "Anytun"
 #define MyAppInstallerName "AnytunInstaller"
-#define MyAppVersion "0.0.0.0"
+; #define MyAppVersion "0.0.0.0"
 
 #define MyAppPublisher "3y"
 #define MyAppURL "https://github.com/aaaa777/anytun"
@@ -36,7 +36,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 OutputBaseFilename={#MyAppInstallerName}
-OutputDir=..\output
+OutputDir=.\output
 DisableDirPage=yes
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
@@ -58,9 +58,10 @@ Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
 
 [Files]
 ; anytun
-Source: "{#MyAppExeName}";          DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "{#MyAppSetupExeName}";     DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "{#MyAppUninstallExeName}"; DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppExeName}";             DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppSetupExeName}";        DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppNetworkEventExeName}"; DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppUninstallExeName}";    DestDir: "{app}"; Flags: ignoreversion signonce
 ; configurables
 Source: "{#MyAppBypassConfig}";     DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppHostsConfig}";      DestDir: "{app}"; Flags: ignoreversion
@@ -108,8 +109,8 @@ Name: "{autoprograms}\{#MyAppExeName}"; Filename: "{app}\{#MyAppExeName}"
 ; Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\OnInstall"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec runhidden skipifsilent
-Filename: "{app}\{#MyAppNetworkEventExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec runhidden skipifsilent
+Filename: "{app}\OnInstall.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec runhidden skipifsilent
+Filename: "{app}\OnNetworkChange.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec runhidden skipifsilent
 
 [UninstallRun]
 Filename: "{app}\{#MyAppUninstallExeName}"; Flags: runhidden; RunOnceId: UninstallRunOnce
