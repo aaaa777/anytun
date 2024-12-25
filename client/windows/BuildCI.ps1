@@ -1,6 +1,6 @@
 $scriptPath = $MyInvocation.MyCommand.Path
 $scriptDir = $(Split-Path -Parent $scriptPath)
-$appVersion = Get-Content $(Join-Path $scriptDir ".\..\..\VERSION")
+$appVersion = Get-Content $(Join-Path $scriptDir "..\..\VERSION")
 
 echo "version: $appVersion"
 
@@ -30,4 +30,4 @@ tar -xzf $(Join-Path $scriptDir ".\build\coredns.tgz") -C $(Join-Path $scriptDir
 # Move-Item $(Join-Path $scriptDir ".\build\coredns\amd64\coredns_1.12.0_windows_amd64\coredns.exe") $(Join-Path $scriptDir ".\build\coredns\amd64\coredns.exe") -Force
 
 # C:\"Program Files (x86)"\"Inno Setup 6"\ISCC.exe /dMyAppVersion=$appVersion /dMyAppInstallerName="AnytunInstaller" $(Join-Path $scriptDir ".\installer.iss")
-iscc.exe "/SMySignTool=.\signtool.exe /dMyAppVersion=`"$Env:appVersion`" /dMyAppInstallerName=`"AnytunInstaller`" sign /v /f `$qD:\a\anytun\anytun\GitHubActionsWorkflow.pfx`$q /p `${{ secrets.Pfx_Passphrase }} /t http://timestamp.comodoca.com/authenticode /fd SHA256 `$p" $(Join-Path $scriptDir ".\installer.iss")
+iscc.exe "/SMySignTool=.\signtool.exe /dMyAppVersion=`"$appVersion`" /dMyAppInstallerName=`"AnytunInstaller`" sign /v /f `$qD:\a\anytun\anytun\GitHubActionsWorkflow.pfx`$q /p `${{ secrets.Pfx_Passphrase }} /t http://timestamp.comodoca.com/authenticode /fd SHA256 `$p" $(Join-Path $scriptDir ".\installer.iss")
