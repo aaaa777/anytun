@@ -7,7 +7,7 @@
 
 #define MyAppName "Anytun"
 #define MyAppInstallerName "AnytunInstaller"
-;#define MyAppVersion "0.0.0.0"
+#define MyAppVersion "0.0.0.0"
 
 #define MyAppPublisher "3y"
 #define MyAppURL "https://github.com/aaaa777/anytun"
@@ -67,14 +67,14 @@ Source: "{#MyAppHostsConfig}";      DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppCoreDnsConfig}";    DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppV2rayConfig}";      DestDir: "{app}"; Flags: ignoreversion; DestName: "config.json"
 ; v2ray
-Source: ".\v2ray\amd64\v2ray.exe";          DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion signonce; BeforeInstall: TaskKill('v2ray.exe')
-Source: ".\v2ray\amd64\geoip.dat";          DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion
-Source: ".\v2ray\amd64\geosite.dat";        DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion
+Source: ".\build\v2ray\amd64\v2ray.exe";          DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion signonce; BeforeInstall: TaskKill('v2ray.exe')
+Source: ".\build\v2ray\amd64\geoip.dat";          DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion
+Source: ".\build\v2ray\amd64\geosite.dat";        DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion
 ; tun2socks
-Source: ".\tun2socks\amd64\tun2socks.exe";  DestDir: "{app}\tun2socks\amd64"; Flags: ignoreversion signonce; BeforeInstall: TaskKill('tun2socks.exe')
-Source: ".\tun2socks\amd64\wintun.dll";     DestDir: "{app}\tun2socks\amd64"; Flags: ignoreversion signonce
+Source: ".\build\tun2socks\amd64\tun2socks.exe";  DestDir: "{app}\tun2socks\amd64"; Flags: ignoreversion signonce; BeforeInstall: TaskKill('tun2socks.exe')
+Source: ".\build\tun2socks\amd64\wintun.dll";     DestDir: "{app}\tun2socks\amd64"; Flags: ignoreversion signonce
 ; coredns
-Source: ".\coredns\amd64\coredns.exe";      DestDir: "{app}\coredns\amd64"; Flags: ignoreversion signonce; BeforeInstall: TaskKill('coredns.exe')
+Source: ".\build\coredns\amd64\coredns.exe";      DestDir: "{app}\coredns\amd64"; Flags: ignoreversion signonce; BeforeInstall: TaskKill('coredns.exe')
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [InstallDelete]
