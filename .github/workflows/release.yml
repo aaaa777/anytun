@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*.*.*'
+    branches:
+      - 'main'
 
 jobs:
   build:
@@ -20,6 +22,30 @@ jobs:
       run: pwsh ./client/windows/build.ps1
       env:
         appVersion: ${{ github.ref_name }}
+
+    # Decode the base 64 encoded pfx and save the Signing_Certificate
+    - name: Decode the pfx
+      run: |
+        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+        [IO.File]::WriteAllBytes(".\GitHubActionsWorkflow.pfx", $pfx_cert_byte)
+
+    - name: 'Copy signtool script'
+      run: |
+        Copy-Item -Path C:/"Program Files (x86)"/"Windows Kits"/10/bin/10.0.22621.0/x86/signtool.exe -Destination .
+
+    - name: 'Check dir'
+      run: |
+        Get-ChildItem -Path .
+
+    - name: Compile Inno Setup
+      run: |
+        iscc.exe '/SMySignTool=.\signtool.exe sign /v /f $qD:\a\anytun\anytun\GitHubActionsWorkflow.pfx$q /p ${{ secrets.Pfx_Passphrase }} /t http://timestamp.comodoca.com/authenticode /fd SHA256 $p' client/windows/installer.iss
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    # Remove the pfx
+    - name: Remove the pfx
+      run: Remove-Item -path .\GitHubActionsWorkflow.pfx
 
     - name: Create Release
       id: create_release
@@ -38,6 +64,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./path/to/your/installer.exe
-        asset_name: installer.exe
+        asset_path: ./client/windows/output/AnytunInstaller.exe
+        asset_name: AnytunInstaller.exe
         asset_content_type: application/octet-stream
