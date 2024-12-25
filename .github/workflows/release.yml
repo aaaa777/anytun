@@ -32,9 +32,9 @@ jobs:
         Get-ChildItem -Path .
 
     - name: Run build script
+      shell: powershell
       run: |
         ./client/windows/BuildCI.ps1
-        
       env:
         appVersion: ${{ github.ref_name }}
         Configuration: ${{ matrix.configuration }}
