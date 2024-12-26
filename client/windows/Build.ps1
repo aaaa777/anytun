@@ -1,11 +1,12 @@
 param(
-    [Parameter(HelpMessage="Build in CI mode")]
+    [Parameter(HelpMessage="Build in CI mode")],
     [switch]$Ci,
 
-    [Parameter(HelpMessage="Set build version(but not implemented)")]
+    [Parameter(HelpMessage="Set build version(but not implemented)")],
     [string]$Version = "0.0.0",
 
     [Parameter(HelpMessage="Skip downloads")]
+    [switch]$SkipDownload
 )
 
 $scriptPath = $MyInvocation.MyCommand.Path
