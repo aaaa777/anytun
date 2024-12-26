@@ -1,3 +1,5 @@
+<# OnNetworkChange.exeはネットワークの変更を検出してAnytun.exeを実行する #>
+
 <# メイン処理 #>
 $targetNetworkInterface = "Wi-Fi"
 $targetSSID = "HIU_WiFi"
@@ -53,10 +55,7 @@ function Set-UpAnytun {
 }
 
 function Set-DownAnytun {
-    Stop-Process -Name anytun -Force -ErrorAction SilentlyContinue
-    Stop-Process -Name v2ray -Force -ErrorAction SilentlyContinue
-    Stop-Process -Name tun2socks -Force -ErrorAction SilentlyContinue
-    Stop-Process -Name coredns -Force -ErrorAction SilentlyContinue
+    Start-Process -FilePath ".\anytun.exe" -ArgumentList "-Stop" -WindowStyle Hidden -PassThru
 }
 
 <# 指定のDNSのメトリックを低くする関数 #>

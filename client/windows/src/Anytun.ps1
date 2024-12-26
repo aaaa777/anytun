@@ -1,5 +1,19 @@
+<# Anytun.exeは各種設定ファイルのビルドやプロセスの管理を行う #>
+
+param(
+    [Parameter(HelpMessage="Stop anytun service")]
+    [switch]$Stop,
+)
+
 $scriptPath = $MyInvocation.MyCommand.Path
 $scriptDir = $(Split-Path -Parent $scriptPath)
+
+function Stop-Anytun {
+    Stop-Process -Name anytun -Force -ErrorAction SilentlyContinue
+    Stop-Process -Name v2ray -Force -ErrorAction SilentlyContinue
+    Stop-Process -Name tun2socks -Force -ErrorAction SilentlyContinue
+    Stop-Process -Name coredns -Force -ErrorAction SilentlyContinue
+}
 
 function Restart-V2ray {
     Stop-Process -Name v2ray -Force -ErrorAction SilentlyContinue
@@ -52,7 +66,7 @@ function Restart-Coredns {
     return $coredns
 }
 
-function Get-Corefile{
+function Build-Corefile{
     param (
         [string] $domains_line
     )
@@ -73,11 +87,13 @@ $domains_line {
 "
 }
 
-function Get-V2rayConfig {
+function Get-CurrentV2rayConfig {
     $jsonFilePath = "config.json"
 }
 
 function Set-AnytunConfigs {
+
+    <# Corefile #>
     $resultLines = @()
     Get-Content "BypassDomains.txt" | ForEach-Object {
         if ($_ -match '^\s*#|^\s*$') {
@@ -86,11 +102,16 @@ function Set-AnytunConfigs {
         $resultLines += ($_ -split '\s+' | Where-Object { $_ -ne '' })
     }
     $domains_line = $resultLines -join ' '
-    Get-Corefile -domains_line $domains_line | Out-File -FilePath 'Corefile' -Encoding utf8
+    Build-Corefile -domains_line $domains_line | Out-File -FilePath 'Corefile' -Encoding utf8
 }
 
 <# メイン処理 #>
 function Invoke-Main {
+    if ($Stop) {
+        Stop-Anytun
+        return
+    }
+
     Set-AnytunConfigs
     
     if (Get-Process -Name "v2ray" -ErrorAction SilentlyContinue) {
@@ -107,5 +128,5 @@ function Invoke-Main {
     
 }
 
-echo $scriptDir
-#Invoke-Main
+# echo $scriptDir
+Invoke-Main

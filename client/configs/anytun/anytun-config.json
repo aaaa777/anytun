@@ -3,10 +3,17 @@
 
 {
     "version": 1,
-    "trigger_type": "SSID",
-    "trigger_ssid": "HIU_WiFi",
-    "allowed_dns_server": "10.10.1.201",
-    "gateway_server_url": "<reducted>",
-    "gateway_server_id": "<reducted>",
-    "gateway_server_list": "https://anytun.example.com/update"
+    // "trigger": {
+    //     "on": "ssid", // only windows
+    //     "ssid": "DAIGAKU-WiFi"
+    // },
+    "trigger": {
+        "on": "detect_cisco_umbrella"
+    },
+    "gateway": {
+        "servers": [
+            { "address": "<reducted>", "id": "<reducted>" }
+        ],
+        "auto_update_url": "https://anytun.example.com/update"
+    }
 }
