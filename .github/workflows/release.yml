@@ -2,8 +2,8 @@ name: Build and Pre-release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    # tags:
+    #   - 'v*.*.*'
     branches:
       - 'main'
 
@@ -40,7 +40,7 @@ jobs:
     - name: Run build script
       shell: powershell
       run: |
-        ./client/windows/BuildCI.ps1
+        ./client/windows/Build.ps1 -Ci
       env:
         appVersion: ${{ github.ref_name }}
         Configuration: ${{ matrix.configuration }}

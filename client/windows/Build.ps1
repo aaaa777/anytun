@@ -1,8 +1,18 @@
+param(
+    [Parameter(HelpMessage="Build in CI mode")]
+    [switch]$Ci,
+
+    [Parameter(HelpMessage="Set build version(but not implemented)")]
+    [string]$Version = "0.0.0",
+
+    [Parameter(HelpMessage="Skip downloads")]
+)
+
 $scriptPath = $MyInvocation.MyCommand.Path
 $scriptDir = $(Split-Path -Parent $scriptPath)
 $appVersion = Get-Content $(Join-Path $scriptDir ".\..\..\VERSION")
 
-echo "version: $appVersion"
+echo "build version: $appVersion"
 
 mkdir $(Join-Path $scriptDir ".\build\anytun\amd64") -ErrorAction SilentlyContinue
 ps2exe $(Join-Path $scriptDir ".\src\anytun.ps1") $(Join-Path $scriptDir ".\build\anytun\amd64\anytun.exe") -noConsole -noOutput
@@ -29,4 +39,8 @@ Invoke-WebRequest -Uri "https://github.com/coredns/coredns/releases/download/v1.
 tar -xzf $(Join-Path $scriptDir ".\build\coredns.tgz") -C $(Join-Path $scriptDir ".\build\coredns\amd64")
 # Move-Item $(Join-Path $scriptDir ".\build\coredns\amd64\coredns_1.12.0_windows_amd64\coredns.exe") $(Join-Path $scriptDir ".\build\coredns\amd64\coredns.exe") -Force
 
-C:\"Program Files (x86)"\"Inno Setup 6"\ISCC.exe /dMyAppVersion=$appVersion /dMyAppInstallerName="AnytunInstaller" $(Join-Path $scriptDir ".\installer.iss")
+if ($Ci) {
+    iscc.exe "/dMyAppVersion=`"$appVersion`" /dMyAppInstallerName=`"AnytunInstaller`" /SMySignTool=.\signtool.exe sign /v /f `$qD:\a\anytun\anytun\GitHubActionsWorkflow.pfx`$q /p `${{ secrets.Pfx_Passphrase }} /t http://timestamp.comodoca.com/authenticode /fd SHA256 `$p" $(Join-Path $scriptDir ".\installer.iss")
+} else {
+    C:\"Program Files (x86)"\"Inno Setup 6"\ISCC.exe /dMyAppVersion=$appVersion /dMyAppInstallerName="AnytunInstaller" $(Join-Path $scriptDir ".\installer.iss")
+}
