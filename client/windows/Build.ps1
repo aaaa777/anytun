@@ -8,7 +8,8 @@ param(
     [Parameter(HelpMessage="Skip downloads")]
     [switch]$SkipDownload,
 
-    []
+    [Parameter(HelpMessage="Without code signing")]
+    [switch]$SkipSign
 )
 
 $scriptPath = $MyInvocation.MyCommand.Path
