@@ -42,8 +42,8 @@ jobs:
       run: |
         ./client/windows/Build.ps1 -Ci
       env:
-        appVersion: ${{ github.ref_name }}
-        Configuration: ${{ matrix.configuration }}
+        appVersion: ${{ github.ref_name }} # not used in the script
+        pfxPassphrase: ${{ secrets.Pfx_Passphrase }}
 
     # Remove the pfx
     - name: Remove the pfx
