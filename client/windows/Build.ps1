@@ -41,7 +41,7 @@ tar -xzf $(Join-Path $scriptDir ".\build\coredns.tgz") -C $(Join-Path $scriptDir
 # Move-Item $(Join-Path $scriptDir ".\build\coredns\amd64\coredns_1.12.0_windows_amd64\coredns.exe") $(Join-Path $scriptDir ".\build\coredns\amd64\coredns.exe") -Force
 
 if ($Ci) {
-    iscc.exe /dMyAppVersion="$appVersion" /dMyAppInstallerName="AnytunInstaller" "/SMySignTool=.\signtool.exe sign /v /f `$qD:\a\anytun\anytun\GitHubActionsWorkflow.pfx`$q /p `"$env:Pfx_Passphrase`" /t http://timestamp.comodoca.com/authenticode /fd SHA256 `$p `$f" $(Join-Path $scriptDir ".\installer.iss")
+    iscc.exe /dMyAppVersion="$appVersion" /dMyAppInstallerName="AnytunInstaller" "/SMySignTool=.\signtool.exe sign /v /fd SHA256 /f `$qD:\a\anytun\anytun\GitHubActionsWorkflow.pfx`$q /p $Env:pfxPassphrase /t http://timestamp.comodoca.com/authenticode `$p `$f" $(Join-Path $scriptDir ".\installer.iss")
 } else {
     C:\"Program Files (x86)"\"Inno Setup 6"\ISCC.exe /dMyAppVersion=$appVersion /dMyAppInstallerName="AnytunInstaller" $(Join-Path $scriptDir ".\installer.iss")
 }
