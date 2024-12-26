@@ -6,7 +6,9 @@ param(
     [string]$Version = "0.0.0",
 
     [Parameter(HelpMessage="Skip downloads")]
-    [switch]$SkipDownload
+    [switch]$SkipDownload,
+
+    []
 )
 
 $scriptPath = $MyInvocation.MyCommand.Path

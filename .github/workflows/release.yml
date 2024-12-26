@@ -17,6 +17,11 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Create config file
+      run: |
+        $v2rayConfigJson = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_V2ray_Config_Json }}")
+        [IO.File]::WriteAllBytes(".\client\configs\v2ray\config.json", $v2rayConfigJson)
+
     - name: Install PSScriptAnalyzer module
       shell: powershell
       run: |
