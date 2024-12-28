@@ -11,10 +11,10 @@
 
 #define MyAppPublisher "3y"
 #define MyAppURL "https://github.com/aaaa777/anytun"
-#define MyAppExeName              ".\build\anytun\amd64\Anytun.exe"
-#define MyAppNetworkEventExeName  ".\build\anytun\amd64\OnNetworkChange.exe"
-#define MyAppSetupExeName         ".\build\anytun\amd64\OnInstall.exe"
-#define MyAppUninstallExeName     ".\build\anytun\amd64\OnUninstall.exe"
+#define MyAppExeName              ".\build\Anytun.exe"
+#define MyAppNetworkEventExeName  ".\build\OnNetworkChange.exe"
+#define MyAppSetupExeName         ".\build\OnInstall.exe"
+#define MyAppUninstallExeName     ".\build\OnUninstall.exe"
 #define MyAppBypassConfig         "..\configs\anytun\BypassDomains.txt"
 #define MyAppCoreDnsConfig        "..\configs\coredns\Corefile"
 #define MyAppHostsConfig          "..\configs\anytun\Anytun.hosts"
@@ -58,10 +58,10 @@ Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
 
 [Files]
 ; anytun
-Source: "{#MyAppExeName}";             DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
-Source: "{#MyAppSetupExeName}";        DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
-Source: "{#MyAppNetworkEventExeName}"; DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
-Source: "{#MyAppUninstallExeName}";    DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
+Source: "{#MyAppExeName}";             DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppSetupExeName}";        DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppNetworkEventExeName}"; DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppUninstallExeName}";    DestDir: "{app}"; Flags: ignoreversion signonce
 ; configurables
 Source: "{#MyAppBypassConfig}";     DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppHostsConfig}";      DestDir: "{app}"; Flags: ignoreversion
