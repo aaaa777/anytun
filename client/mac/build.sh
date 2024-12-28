@@ -12,6 +12,8 @@ rm tun2socks.zip
 
 cp ../src/anytun.sh .
 cp ../src/anytund.sh .
+cp ../src/launch_anytund.sh .
+cp ../src/install_anytun.sh .
 
 cp ../../configs/anytun/Anytun.hosts .
 cp ../../configs/anytun/BypassDomains.txt .
