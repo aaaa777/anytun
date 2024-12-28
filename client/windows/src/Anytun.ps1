@@ -3,6 +3,9 @@
 param(
     [Parameter(HelpMessage="Stop anytun service")]
     [switch]$Stop,
+
+    [Parameter(HelpMessage="Start anytun service")]
+    [switch]$Start
 )
 
 $scriptPath = $MyInvocation.MyCommand.Path
@@ -112,20 +115,22 @@ function Invoke-Main {
         return
     }
 
-    Set-AnytunConfigs
-    
-    if (Get-Process -Name "v2ray" -ErrorAction SilentlyContinue) {
-        $v2ray = Restart-V2ray
-    }
+    if ($Start) {
+        Set-AnytunConfigs
+        
+        if (Get-Process -Name "v2ray" -ErrorAction SilentlyContinue) {
+            $v2ray = Restart-V2ray
+        }
 
-    if($null -eq (Get-NetAdapter | Where-Object { $_.Name -eq "Anytun" })) {
-        $tun2socks = Restart-Tun2Socks
+        if($null -eq (Get-NetAdapter | Where-Object { $_.Name -eq "Anytun" })) {
+            $tun2socks = Restart-Tun2Socks
+        }
+        
+        if (Get-Process -Name "coredns" -ErrorAction SilentlyContinue) {
+            $coredns = Restart-Coredns
+        }
+        return
     }
-    
-    if (Get-Process -Name "coredns" -ErrorAction SilentlyContinue) {
-        $coredns = Restart-Coredns
-    }
-    
 }
 
 # echo $scriptDir

@@ -58,15 +58,15 @@ Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
 
 [Files]
 ; anytun
-Source: "{#MyAppExeName}";             DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "{#MyAppSetupExeName}";        DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "{#MyAppNetworkEventExeName}"; DestDir: "{app}"; Flags: ignoreversion signonce
-Source: "{#MyAppUninstallExeName}";    DestDir: "{app}"; Flags: ignoreversion signonce
+Source: "{#MyAppExeName}";             DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
+Source: "{#MyAppSetupExeName}";        DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
+Source: "{#MyAppNetworkEventExeName}"; DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
+Source: "{#MyAppUninstallExeName}";    DestDir: "{app}\build\anytun\amd64"; Flags: ignoreversion signonce
 ; configurables
 Source: "{#MyAppBypassConfig}";     DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppHostsConfig}";      DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyAppCoreDnsConfig}";    DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyAppV2rayConfig}";      DestDir: "{app}"; Flags: ignoreversion; DestName: "config.json"
+;Source: "{#MyAppCoreDnsConfig}";    DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#MyAppV2rayConfig}";      DestDir: "{app}"; Flags: ignoreversion; DestName: "config.json"
 ; v2ray
 Source: ".\build\v2ray\amd64\v2ray.exe";          DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion signonce; BeforeInstall: TaskKill('v2ray.exe')
 Source: ".\build\v2ray\amd64\geoip.dat";          DestDir: "{app}\v2ray\amd64"; Flags: ignoreversion

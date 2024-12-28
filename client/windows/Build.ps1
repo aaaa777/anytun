@@ -12,17 +12,19 @@ param(
     [switch]$SkipSign
 )
 
+# TODO: config.jsonをbuildディレクトリにコピーする
+
 $scriptPath = $MyInvocation.MyCommand.Path
 $scriptDir = $(Split-Path -Parent $scriptPath)
 $appVersion = Get-Content $(Join-Path $scriptDir ".\..\..\VERSION")
 
 echo "build version: $appVersion"
 
-mkdir $(Join-Path $scriptDir ".\build\anytun\amd64") -ErrorAction SilentlyContinue
-ps2exe $(Join-Path $scriptDir ".\src\anytun.ps1") $(Join-Path $scriptDir ".\build\anytun\amd64\anytun.exe") -noConsole -noOutput
-ps2exe $(Join-Path $scriptDir ".\src\OnInstall.ps1") $(Join-Path $scriptDir ".\build\anytun\amd64\OnInstall.exe") -noConsole -noOutput
-ps2exe $(Join-Path $scriptDir ".\src\OnUninstall.ps1") $(Join-Path $scriptDir ".\build\anytun\amd64\OnUninstall.exe") -noConsole -noOutput
-ps2exe $(Join-Path $scriptDir ".\src\OnNetworkChange.ps1") $(Join-Path $scriptDir ".\build\anytun\amd64\OnNetworkChange.exe") -noConsole -noOutput
+mkdir $(Join-Path $scriptDir ".\build") -ErrorAction SilentlyContinue
+ps2exe $(Join-Path $scriptDir ".\src\Anytun.ps1") $(Join-Path $scriptDir ".\build\Anytun.exe") -noConsole -noOutput
+ps2exe $(Join-Path $scriptDir ".\src\OnInstall.ps1") $(Join-Path $scriptDir ".\build\OnInstall.exe") -noConsole -noOutput
+ps2exe $(Join-Path $scriptDir ".\src\OnUninstall.ps1") $(Join-Path $scriptDir ".\build\OnUninstall.exe") -noConsole -noOutput
+ps2exe $(Join-Path $scriptDir ".\src\OnNetworkChange.ps1") $(Join-Path $scriptDir ".\build\OnNetworkChange.exe") -noConsole -noOutput
 
 mkdir $(Join-Path $scriptDir ".\build\v2ray\amd64") -ErrorAction SilentlyContinue
 Invoke-WebRequest -Uri "https://github.com/v2fly/v2ray-core/releases/download/v5.22.0/v2ray-windows-64.zip" -OutFile $(Join-Path $scriptDir ".\build\v2ray-windows-64.zip")

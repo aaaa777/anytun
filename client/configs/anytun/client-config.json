@@ -1,0 +1,16 @@
+{
+    "version": 1,
+    "trigger": {
+        "on": "detect_cisco_umbrella"
+    },
+    "dns": {
+        "override": "dhcp"
+    },
+    "gateway": {
+        "servers": [
+            { "address": "<reducted>", "users": [ { "id": "<reducted>" , "alterId": 0 } ] },
+            { "address": "<reducted>", "users": [ { "id": "<reducted>" , "alterId": 0 } ] }
+        ],
+        "auto_update_url": "https://anytun.example.com/update"
+    }
+}

@@ -51,11 +51,11 @@ function Set-ProxySettings {
 }
 
 function Set-UpAnytun {
-    Start-Process -FilePath ".\anytun.exe" -WindowStyle Hidden -PassThru
+    Start-Process -FilePath ".\Anytun.exe" -WindowStyle Hidden -PassThru
 }
 
 function Set-DownAnytun {
-    Start-Process -FilePath ".\anytun.exe" -ArgumentList "-Stop" -WindowStyle Hidden -PassThru
+    Start-Process -FilePath ".\Anytun.exe" -ArgumentList "-Stop" -WindowStyle Hidden -PassThru
 }
 
 <# 指定のDNSのメトリックを低くする関数 #>

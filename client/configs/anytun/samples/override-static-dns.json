@@ -1,0 +1,18 @@
+{
+    "version": 1,
+    "trigger": {
+        "on": "detect_cisco_umbrella"
+    },
+    "dns": {
+        "override": "static",
+        "servers": [
+            "192.168.11.1"
+        ]
+    },
+    "gateway": {
+        "servers": [
+            { "address": "<reducted>", "users": [ { "id": "<reducted>" , "alterId": 0 } ] }
+        ],
+        "auto_update_url": "https://anytun.example.com/update"
+    }
+}

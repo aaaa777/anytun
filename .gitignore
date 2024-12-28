@@ -3,3 +3,5 @@
 # **/.ssh
 anytun-server-list
 config.json
+build
+.DS_Store

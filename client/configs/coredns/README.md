@@ -1,0 +1,3 @@
+# coredns config
+
+AnytunではBypassDomains.txtからCorefileが生成されるため、このCorefileは参考用に配置している
