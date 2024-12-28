@@ -49,6 +49,12 @@ jobs:
         Set-PSRepository PSGallery -InstallationPolicy Trusted
         Install-Module ps2exe
 
+    # Decode the base 64 encoded pfx and save the Signing_Certificate
+    - name: Decode the pfx
+      run: |
+        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+        [IO.File]::WriteAllBytes(".\GitHubActionsWorkflow.pfx", $pfx_cert_byte)
+
     - name: 'Copy signtool script'
       run: |
         Copy-Item -Path C:/"Program Files (x86)"/"Windows Kits"/10/bin/10.0.22621.0/x86/signtool.exe -Destination .
@@ -64,6 +70,10 @@ jobs:
       env:
         appVersion: ${{ github.ref_name }} # not used in the script
         pfxPassphrase: ${{ secrets.Pfx_Passphrase }}
+
+    # Remove the pfx
+    - name: Remove the pfx
+      run: Remove-Item -path .\GitHubActionsWorkflow.pfx
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
