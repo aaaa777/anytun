@@ -6,8 +6,31 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: true
+
+  windows-build:
     runs-on: windows-latest
+    needs: create-release
 
     steps:
     - name: Checkout
@@ -26,12 +49,6 @@ jobs:
         Set-PSRepository PSGallery -InstallationPolicy Trusted
         Install-Module ps2exe
 
-    # Decode the base 64 encoded pfx and save the Signing_Certificate
-    - name: Decode the pfx
-      run: |
-        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
-        [IO.File]::WriteAllBytes(".\GitHubActionsWorkflow.pfx", $pfx_cert_byte)
-
     - name: 'Copy signtool script'
       run: |
         Copy-Item -Path C:/"Program Files (x86)"/"Windows Kits"/10/bin/10.0.22621.0/x86/signtool.exe -Destination .
@@ -48,27 +65,36 @@ jobs:
         appVersion: ${{ github.ref_name }} # not used in the script
         pfxPassphrase: ${{ secrets.Pfx_Passphrase }}
 
-    # Remove the pfx
-    - name: Remove the pfx
-      run: Remove-Item -path .\GitHubActionsWorkflow.pfx
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
-        draft: false
-        prerelease: true
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./client/windows/output/AnytunInstaller.exe
+        asset_name: AnytunInstaller.exe
+        asset_content_type: application/octet-stream
+
+  ubuntu-build:
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Run build script
+      run: |
+        ./client/mac/build.sh
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./client/windows/output/AnytunInstaller.exe
-        asset_name: AnytunInstaller.exe
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./client/mac/build/anytun.tar.gz
+        asset_name: anytun.tar.gz
         asset_content_type: application/octet-stream
