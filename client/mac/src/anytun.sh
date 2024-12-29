@@ -4,6 +4,8 @@
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
 
+TMP_CONFIG_DIR="/tmp/anytun"
+
 check-valiables() {
     if [[ -z "$CONFIG_DIR" ]]; then
         echo "CONFIG_DIR is not set"
@@ -23,8 +25,9 @@ setup-route() {
 }
 
 setup-config() {
-    build-v2ray-config > "$CONFIG_DIR/config.json"
-    build-coredns-config > "$CONFIG_DIR/Corefile"
+    mkdir -p "$TMP_CONFIG_DIR"
+    build-v2ray-config > "$TMP_CONFIG_DIR/config.json"
+    build-coredns-config > "$TMP_CONFIG_DIR/Corefile"
 }
 
 stop-services() {
@@ -34,8 +37,8 @@ stop-services() {
 }
 
 start-services() {
-    coredns -conf "$CONFIG_DIR/Corefile" &
-    v2ray run -config "$CONFIG_DIR/config.json" &
+    coredns -conf "$TMP_CONFIG_DIR/Corefile" &
+    v2ray run -config "$TMP_CONFIG_DIR/config.json" &
     tun2socks -device tun://utun77 -proxy socks5://127.0.77.1:3002 &
 }
 
@@ -219,6 +222,9 @@ main() {
             echo "stopping anytun services"
             stop-services
             ;;
+        add-server)
+            SERVER_ADDRESS=$2
+            USER_ID=$3
         *)
             echo "Usage: $0 {start|stop}"
             exit 1
