@@ -5,6 +5,7 @@
 # インストール方法
 
 整備中
+`brew install aaaa777/tap/anytun`
 
 # TODO
 

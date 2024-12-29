@@ -182,7 +182,7 @@ build-coredns-config() {
 . {
     bind 127.0.77.53
     forward . 10.10.1.201
-    hosts anytun.hosts
+    hosts Anytun.hosts
     cache 600
     log
 }

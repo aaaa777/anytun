@@ -97,7 +97,8 @@ jobs:
 
     - name: Run build script
       run: |
-        ./client/mac/build.sh
+        cd client/mac
+        make build
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
