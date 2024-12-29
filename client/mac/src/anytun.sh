@@ -21,7 +21,7 @@ setup-ip() {
 
 setup-route() {
     ifconfig utun77 198.19.0.1/32 broadcast 198.19.0.1 up
-    route add -net 198.18 198.19.0.1
+    route add -net 198.18 198.19.0.1 -ifscope utun77
 }
 
 setup-config() {
