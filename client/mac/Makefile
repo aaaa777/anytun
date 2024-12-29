@@ -19,8 +19,11 @@ install:
 	echo "not implemented"
 
 install-in-brew:
+	ANYTUN_SH=cat anytun.sh && \
+	ANYTUND_SH=cat anytund.sh && \
+	sed -i '' 's|CONFIG_DIR=.*|CONFIG_DIR=$(CONFIG_DIR)|' anytun.sh && \
+	sed -i '' 's|CONFIG_DIR=.*|CONFIG_DIR=$(CONFIG_DIR)|' anytund.sh && 
+
 	cp ../Anytun.hosts $(CONFIG_DIR)/Anytun.hosts && \
 	cp ../BypassDomains.txt $(CONFIG_DIR)/BypassDomains.txt && \
 	cp ../client-config.json $(CONFIG_DIR)/client-config.json
-
-	

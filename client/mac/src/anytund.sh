@@ -2,6 +2,7 @@
 
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
+CONFIG_DIR="../../configs/anytun"
 
 get-if-data() {
     latest_if_data=$(ifconfig -u)
@@ -20,7 +21,7 @@ get-host-default-dns() {
 }
 
 get-anytun-dns-override() {
-    return $(cat ../configs/anytun/client-config.json | jq -r '.dns.override')
+    return $(cat $CONFIG_DIR/client-config.json | jq -r '.dns.override')
 }
 
 main() {
