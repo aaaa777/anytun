@@ -1,8 +1,15 @@
 #!/bin/bash
+# root required
 
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
-CONFIG_DIR="../../configs/anytun"
+# CONFIG_DIR="../../configs/anytun"
+check-valiables() {
+    if [[ -z "$CONFIG_DIR" ]]; then
+        echo "CONFIG_DIR is not set"
+        exit 1
+    fi
+}
 
 get-if-data() {
     latest_if_data=$(ifconfig -u)
@@ -25,6 +32,7 @@ get-anytun-dns-override() {
 }
 
 main() {
+    check-valiables
     INTERFACE="en0"
     site_ip=""
     dns_ip=""
@@ -48,11 +56,11 @@ main() {
                 if [[ "146.112.61.108" == "$latest_site_ip" ]]; then
                     # anytunを起動する
                     echo "cisco umbrella detected"
-                    # eval "anytun.sh start"
+                    eval "CONFIG_DIR=$CONFIG_DIR anytun.sh start"
                 else
                     # anytunを停止する
                     echo "network is clean"
-                    # eval "anytun.sh stop"
+                    eval "CONFIG_DIR=$CONFIG_DIR anytun.sh stop"
                 fi
             fi
             site_ip="$latest_site_ip"

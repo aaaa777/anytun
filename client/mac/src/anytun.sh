@@ -4,6 +4,13 @@
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
 
+check-valiables() {
+    if [[ -z "$CONFIG_DIR" ]]; then
+        echo "CONFIG_DIR is not set"
+        exit 1
+    fi
+}
+
 setup-ip() {
     ifconfig lo0 alias 127.0.77.1/32
     ifconfig lo0 alias 127.0.77.52/32
@@ -16,8 +23,8 @@ setup-route() {
 }
 
 setup-config() {
-    build-v2ray-config > "config.json"
-    build-coredns-config > "Corefile"
+    build-v2ray-config > "$CONFIG_DIR/config.json"
+    build-coredns-config > "$CONFIG_DIR/Corefile"
 }
 
 stop-services() {
@@ -27,14 +34,14 @@ stop-services() {
 }
 
 start-services() {
-    coredns -conf "Corefile" &
-    v2ray run -config "config.json" &
-    tun2socks/arm64/tun2socks -device tun://utun77 -proxy socks5://127.0.77.1:3002 &
+    coredns -conf "$CONFIG_DIR/Corefile" &
+    v2ray run -config "$CONFIG_DIR/config.json" &
+    tun2socks -device tun://utun77 -proxy socks5://127.0.77.1:3002 &
 }
 
 # for loadbalancing
 get-anytun-gateway-servers() {
-    cat "client-config.json" | jq -r '.gateway.servers'
+    cat "$CONFIG_DIR/client-config.json" | jq -r '.gateway.servers'
 }
 
 build-v2ray-config() {
@@ -182,12 +189,12 @@ build-coredns-config() {
 . {
     bind 127.0.77.53
     forward . 10.10.1.201
-    hosts Anytun.hosts
+    hosts $CONFIG_DIR/Anytun.hosts
     cache 600
     log
 }
 
-$(cat BypassDomains.txt | grep -v -e '^#' -e '^$' | uniq | tr '\n' ' ') {
+$(cat $CONFIG_DIR/BypassDomains.txt | grep -v -e '^#' -e '^$' | uniq | tr '\n' ' ') {
     bind 127.0.77.53
     forward . 127.0.77.52
     cache 10
@@ -197,6 +204,7 @@ EOF
 }
 
 main() {
+    check-valiables
     case $1 in
         start)
             echo "starting anytun services"
