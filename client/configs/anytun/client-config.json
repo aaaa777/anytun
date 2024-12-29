@@ -8,8 +8,7 @@
     },
     "gateway": {
         "servers": [
-            { "address": "<reducted>", "users": [ { "id": "<reducted>" , "alterId": 0 } ] },
-            { "address": "<reducted>", "users": [ { "id": "<reducted>" , "alterId": 0 } ] }
+            { "address": "<reducted>", "port": 443, "users": [ { "id": "<reducted>" , "alterId": 0 } ] }
         ],
         "auto_update_url": "https://anytun.example.com/update"
     }
