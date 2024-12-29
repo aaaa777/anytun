@@ -225,6 +225,7 @@ main() {
         add-server)
             SERVER_ADDRESS=$2
             USER_ID=$3
+            ;;
         *)
             echo "Usage: $0 {start|stop}"
             exit 1

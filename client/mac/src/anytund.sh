@@ -4,6 +4,11 @@
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
 # CONFIG_DIR="../../configs/anytun"
+
+kill-anytund() {
+    pkill -f anytund.sh
+}
+
 check-valiables() {
     if [[ -z "$CONFIG_DIR" ]]; then
         echo "CONFIG_DIR is not set"
@@ -32,6 +37,7 @@ get-anytun-dns-override() {
 }
 
 main() {
+    kill-anytund
     check-valiables
     INTERFACE="en0"
     site_ip=""
