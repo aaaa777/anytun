@@ -16,7 +16,6 @@ build: .FORCE clean build-directory anytun anytund Anytun.hosts BypassDomains.tx
 	@tar -czvf build/anytun.tar.gz \
 		-C build \
 		Anytun.hosts \
-		Anytun.hosts \
 		BypassDomains.txt \
 		client-config.json \
 		anytun \
@@ -25,9 +24,10 @@ build: .FORCE clean build-directory anytun anytund Anytun.hosts BypassDomains.tx
 
 build-directory:
 	@mkdir -p build
+	@echo "CONFIG_DIR: $(CONFIG_DIR)"
+	@echo "TEMPLATE_CONFIG_DIR: $(TEMPLATE_CONFIG_DIR)"
 
 anytun:
-	@echo "CONFIG_DIR: $(CONFIG_DIR)"
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
 	@echo "#!/bin/sh" > build/anytun
 	@cpp --traditional-cpp -C -P \
@@ -36,7 +36,6 @@ anytun:
 	@chmod +x build/anytun
 
 anytund:
-	@echo "CONFIG_DIR: $(CONFIG_DIR)"
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
 	@echo "#!/bin/sh" > build/anytund
 	@cpp --traditional-cpp -C -P \
