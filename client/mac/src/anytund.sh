@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 # root required
 # TODO: Cとして書いてもいいのでは？
 
-echo "you cant run this script directly. please run \`make build && cd build && ./anytun\`" # anytun: remove_after_build
-exit 1 # anytun: remove_after_build
+# echo "you cant run this script directly. please run \`make build && cd build && ./anytun\`" # anytun: remove_after_build
+# exit 1 # anytun: remove_after_build
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
 
-CONFIG_DIR="/config/anytun" # anytun: set_config_dir
+CONFIG_DIR=MACRO_ANYTUN_CONFIG_DIR # anytun: set_config_dir
 
 kill-anytund() {
     pkill -f anytund.sh
