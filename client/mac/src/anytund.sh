@@ -49,6 +49,11 @@ is-cisco-umbrella() {
 }
 
 main() {
+    if [[ $1 != "serve" ]]; then
+        echo "you cant run this script directly."
+        exit 1
+    fi
+    
     kill-anytund
     INTERFACE="en0"
     site_ip=""
@@ -91,4 +96,4 @@ main() {
     done
 }
 
-main
+main $@
