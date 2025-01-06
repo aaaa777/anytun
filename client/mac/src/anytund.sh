@@ -69,7 +69,7 @@ main() {
                 else
                     # anytunを停止する
                     echo "network is clean"
-                    eval "anytun.sh stop"
+                    eval "anytun stop"
                 fi
             fi
             site_ip="$latest_site_ip"
