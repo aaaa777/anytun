@@ -1,22 +1,19 @@
 #!/bin/zsh
 # root required
+# TODO: Cとして書いてもいいのでは？
 
+echo "you cant run this script directly. please run \`make build && cd build && ./anytun\`" # anytun: remove_after_build
+exit 1 # anytun: remove_after_build
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
 
+CONFIG_DIR="/config/anytun" # anytun: set_config_dir
 TMP_CONFIG_DIR="/tmp/anytun"
 
-check-valiables() {
-    if [[ -z "$CONFIG_DIR" ]]; then
-        echo "CONFIG_DIR is not set"
-        exit 1
-    fi
-}
-
 setup-ip() {
-    ifconfig lo0 alias 127.0.77.1/32
-    ifconfig lo0 alias 127.0.77.52/32
-    ifconfig lo0 alias 127.0.77.53/32
+    ifconfig lo0 alias 127.0.77.1/32  # socks5(v2ray)
+    ifconfig lo0 alias 127.0.77.52/32 # fakedns(v2ray)
+    ifconfig lo0 alias 127.0.77.53/32 # coredns
 }
 
 setup-route() {
@@ -46,6 +43,12 @@ start-services() {
 get-anytun-gateway-servers() {
     cat "$CONFIG_DIR/client-config.json" | jq -r '.gateway.servers'
 }
+
+get-anytun-bypass-domains() {
+    cat $CONFIG_DIR/BypassDomains.txt | grep -v -e '^#' -e '^$' | uniq | tr '\n' ' '
+}
+
+
 
 build-v2ray-config() {
     jq -nc --argjson vnext "$(get-anytun-gateway-servers)" '
@@ -188,16 +191,18 @@ build-v2ray-config() {
 }
 
 build-coredns-config() {
+    LAN_ROOT_DNS=$(get-anytun-lan-root-dns)
+    BYPASS_DOMAINS=$(get-anytun-bypass-domains)
     cat <<EOF
 . {
     bind 127.0.77.53
-    forward . 10.10.1.201
+    forward . $LAN_ROOT_DNS
     hosts $CONFIG_DIR/Anytun.hosts
     cache 600
     log
 }
 
-$(cat $CONFIG_DIR/BypassDomains.txt | grep -v -e '^#' -e '^$' | uniq | tr '\n' ' ') {
+$BYPASS_DOMAINS {
     bind 127.0.77.53
     forward . 127.0.77.52
     cache 10
@@ -215,7 +220,7 @@ main() {
             setup-config
             setup-ip
             start-services
-            sleep 1
+            # sleep 1
             setup-route
             ;;
         stop)

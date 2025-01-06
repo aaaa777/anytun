@@ -1,11 +1,25 @@
 # Anytun
 
-制限の厳しい大学内LANでDiscordやTwitterを動作させるためのソフトウェア
+制限の厳しい大学内LANでDiscordやTwitterを動作させるためのソフトウェア 
 
 # インストール方法
 
 整備中
-`brew install aaaa777/tap/anytun`
+```
+brew tap aaaa777/tap
+brew install aaaa777/anytun
+```
+
+# Config
+
+配置場所は以下にする予定
+Mac: `/usr/local/etc/anytun/` 
+Windows: `C:\"Program Files(x86)"\Anytun\` 
+
+# Usage
+
+整備中 
+クライアントはwinget, brew, aptでインストール可能にし、サーバーはdockerhubからプルできるようにする 
 
 # TODO
 
@@ -13,15 +27,16 @@
 
 ### architecture
 - [x] Windows(amd64)対応 
-- [ ] Mac(Apple Silicon)対応 
+- [x] Mac(Apple Silicon)対応 
 - [ ] Mac(Intel)対応 
-- [ ] Windows(arm64)対応
+- [ ] Windows(arm64)対応 
+- [ ] Linux対応
 
 ### installer
 - [x] InnoSetupインストール対応 
-- [ ] Tarball化スクリプト作成 
+- [x] Tarball化スクリプト作成 
 - [ ] homebrewインストール対応 
-- [ ] WinGetインストール対応
+- [ ] WinGetインストール対応 
 
 ### document
 - [ ] インストール方法の記述 

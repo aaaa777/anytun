@@ -1,19 +1,49 @@
-#!/bin/bash
+CONFIG_DIR := 
 
-build: .FORCE
-	mkdir -p build && \
-	cd build && \
-	cp ../Makefile . && \
-	cp ../src/anytun.sh . && \
-	cp ../src/anytund.sh . && \
-	cp ../src/launch_anytund.sh . && \
-	cp ../src/install_anytun.sh . && \
-	cp ../../configs/anytun/Anytun.hosts . && \
-	cp ../../configs/anytun/BypassDomains.txt . && \
-	cp ../../configs/anytun/client-config.json . && \
-	tar -czvf anytun.tar.gz anytun.sh anytund.sh launch_anytund.sh install_anytun.sh Anytun.hosts BypassDomains.txt client-config.json Makefile
+# for brew install
+tarball-src: .FORCE build-directory
+	@tar -czvf build/tarball-src.tar.gz \
+		./src/anytun.sh \
+		./src/anytund.sh \
+		../configs/anytun/Anytun.hosts \
+		../configs/anytun/BypassDomains.txt \
+		../configs/anytun/client-config.json \
+		Makefile
 
+build: .FORCE clean build-directory anytun anytund
+	@cp ./../configs/anytun/Anytun.hosts build/
+	@cp ./../configs/anytun/BypassDomains.txt build/
+	@cp ./../configs/anytun/client-config.json build/
+	@cp ./Makefile build/
+	@tar -czvf build/anytun.tar.gz -C build \
+		anytun \
+		anytund \
+		Anytun.hosts \
+		BypassDomains.txt \
+		client-config.json
 .FORCE:
 
+build-directory:
+	@mkdir -p build
+
+anytun:
+	@echo "CONFIG_DIR: $(CONFIG_DIR)"
+	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
+	cpp --traditional-cpp -C -P \
+		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
+		src/anytun.sh 1> build/anytun || echo 'built anytun'
+	@chmod +x build/anytun
+
+anytund:
+	@echo "CONFIG_DIR: $(CONFIG_DIR)"
+	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
+	cpp --traditional-cpp -C -P \
+		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
+		src/anytund.sh 1> build/anytund || echo 'built anytund'
+	@chmod +x build/anytund
+
 install:
-	echo "not implemented"
+	@echo "not implemented"
+
+clean: 
+	@rm -rf build

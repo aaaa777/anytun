@@ -1,20 +1,24 @@
 #!/bin/bash
 # root required
+# TODO: Cとして書いてもいいのでは？
 
+echo "you cant run this script directly. please run \`make build && cd build && ./anytun\`" # anytun: remove_after_build
+exit 1 # anytun: remove_after_build
 SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR
-# CONFIG_DIR="../../configs/anytun"
+
+CONFIG_DIR="/config/anytun" # anytun: set_config_dir
 
 kill-anytund() {
     pkill -f anytund.sh
 }
 
-check-valiables() {
-    if [[ -z "$CONFIG_DIR" ]]; then
-        echo "CONFIG_DIR is not set"
-        exit 1
-    fi
-}
+# check-valiables() {
+#     if [[ -z "$CONFIG_DIR" ]]; then
+#         echo "CONFIG_DIR is not set"
+#         exit 1
+#     fi
+# }
 
 get-if-data() {
     latest_if_data=$(ifconfig -u)
@@ -62,11 +66,11 @@ main() {
                 if [[ "146.112.61.108" == "$latest_site_ip" ]]; then
                     # anytunを起動する
                     echo "cisco umbrella detected"
-                    eval "CONFIG_DIR=$CONFIG_DIR anytun.sh start"
+                    eval "anytun start"
                 else
                     # anytunを停止する
                     echo "network is clean"
-                    eval "CONFIG_DIR=$CONFIG_DIR anytun.sh stop"
+                    eval "anytun.sh stop"
                 fi
             fi
             site_ip="$latest_site_ip"
