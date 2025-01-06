@@ -1,9 +1,16 @@
-CONFIG_DIR :=
+BREW_BUILD := 0
+
+ifeq ($(BREW_BUILD), 1)
+CONFIG_DIR := /usr/local/etc/anytun
+TEMPLATE_CONFIG_DIR := .
+else
+CONFIG_DIR := /etc/anytun
 TEMPLATE_CONFIG_DIR := ../configs/anytun
+endif
 
 # for brew install
-tarball-src: .FORCE Anytun.hosts BypassDomains.txt client-config.json
-	@tar -czvf build/tarball-src.tar.gz \
+brew-tarball: .FORCE Anytun.hosts BypassDomains.txt client-config.json
+	@tar -czvf build/brew-tarball.tar.gz \
 		src/anytun.sh \
 		src/anytund.sh \
 		Makefile \
@@ -20,6 +27,7 @@ build: .FORCE anytun anytund Anytun.hosts BypassDomains.txt client-config.json
 		client-config.json \
 		anytun \
 		anytund
+
 .FORCE:
 
 build-directory:
@@ -32,7 +40,7 @@ anytun: build-directory
 	@head -1 src/anytun.sh > build/anytun
 	@cpp --traditional-cpp -C -P \
 		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
-		src/anytun.sh 1>> build/anytun || echo 'built anytun'
+		src/anytun.sh 1>> build/anytun 2>/dev/null || echo 'built anytun'
 	@chmod +x build/anytun
 
 anytund: build-directory
@@ -40,7 +48,7 @@ anytund: build-directory
 	@head -1 src/anytund.sh > build/anytund
 	@cpp --traditional-cpp -C -P \
 		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
-		src/anytund.sh 1>> build/anytund || echo 'built anytund'
+		src/anytund.sh 1>> build/anytund 2>/dev/null || echo 'built anytund'
 	@chmod +x build/anytund
 
 Anytun.hosts: build-directory

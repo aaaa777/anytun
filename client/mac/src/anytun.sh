@@ -4,8 +4,8 @@
 
 # echo "you cant run this script directly. please run \`make build && cd build && ./anytun\`" # anytun: remove_after_build
 # exit 1 # anytun: remove_after_build
-SCRIPT_DIR=$(dirname "$0")
-cd $SCRIPT_DIR
+# SCRIPT_DIR=$(dirname "$0")
+# cd $SCRIPT_DIR
 
 CONFIG_DIR=MACRO_ANYTUN_CONFIG_DIR # anytun: set_config_dir
 TMP_CONFIG_DIR="/tmp/anytun"
@@ -212,7 +212,6 @@ EOF
 }
 
 main() {
-    check-valiables
     case $1 in
         start)
             echo "starting anytun services"
