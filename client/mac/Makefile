@@ -29,7 +29,7 @@ build-directory:
 
 anytun: build-directory
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
-	@echo "#!/bin/sh" > build/anytun
+	@head -1 src/anytun.sh > build/anytun
 	@cpp --traditional-cpp -C -P \
 		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
 		src/anytun.sh 1>> build/anytun || echo 'built anytun'
@@ -37,7 +37,7 @@ anytun: build-directory
 
 anytund: build-directory
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
-	@echo "#!/bin/sh" > build/anytund
+	@head -1 src/anytund.sh > build/anytund
 	@cpp --traditional-cpp -C -P \
 		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
 		src/anytund.sh 1>> build/anytund || echo 'built anytund'

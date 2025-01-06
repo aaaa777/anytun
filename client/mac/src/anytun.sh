@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 # root required
 # TODO: Cとして書いてもいいのでは？
 
