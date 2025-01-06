@@ -4,7 +4,7 @@
         "on": "detect_cisco_umbrella"
     },
     "dns": {
-        "override": "dhcp"
+        "override_type": "dhcp"
     },
     "gateway": {
         "servers": [
