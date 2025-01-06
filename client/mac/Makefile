@@ -1,11 +1,11 @@
 BREW_BUILD := 0
+CONFIG_DIR := /etc/anytun
+TEMPLATE_CONFIG_DIR := ../configs/anytun
+ANYTUN_EXECUTABLE := anytun
 
 ifeq ($(BREW_BUILD), 1)
 CONFIG_DIR := /usr/local/etc/anytun
 TEMPLATE_CONFIG_DIR := .
-else
-CONFIG_DIR := /etc/anytun
-TEMPLATE_CONFIG_DIR := ../configs/anytun
 endif
 
 # for brew install
@@ -20,13 +20,6 @@ brew-tarball: .FORCE Anytun.hosts BypassDomains.txt client-config.json
 		client-config.json
 
 build: .FORCE anytun anytund Anytun.hosts BypassDomains.txt client-config.json
-	@tar -czvf build/anytun.tar.gz \
-		-C build \
-		Anytun.hosts \
-		BypassDomains.txt \
-		client-config.json \
-		anytun \
-		anytund
 
 .FORCE:
 
@@ -37,18 +30,13 @@ build-directory:
 
 anytun: build-directory
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
-	@head -1 src/anytun.sh > build/anytun
-	@cpp --traditional-cpp -C -P \
-		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
-		src/anytun.sh 1>> build/anytun 2>/dev/null || echo 'built anytun'
+	@sed "s:MACRO_ANYTUN_CONFIG_DIR:${CONFIG_DIR}:g" src/anytun.sh > build/anytun
 	@chmod +x build/anytun
 
 anytund: build-directory
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
-	@head -1 src/anytund.sh > build/anytund
-	@cpp --traditional-cpp -C -P \
-		-DMACRO_ANYTUN_CONFIG_DIR=${CONFIG_DIR} \
-		src/anytund.sh 1>> build/anytund 2>/dev/null || echo 'built anytund'
+	@sed "s:MACRO_ANYTUN_CONFIG_DIR:${CONFIG_DIR}:g" src/anytund.sh | \
+		sed "s:MACRO_ANYTUN_EXECUTABLE:${ANYTUN_EXECUTABLE}:g" > build/anytund
 	@chmod +x build/anytund
 
 Anytun.hosts: build-directory
