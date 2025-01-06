@@ -10,7 +10,7 @@
 CONFIG_DIR=MACRO_ANYTUN_CONFIG_DIR # anytun: set_config_dir
 
 kill-anytund() {
-    pkill -f anytund.sh
+    pkill -f anytund
 }
 
 # check-valiables() {

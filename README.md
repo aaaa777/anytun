@@ -4,10 +4,16 @@
 
 # インストール方法
 
+## Windows
+
 整備中
+
+## Mac
+
+homebrew 
 ```
 brew tap aaaa777/tap
-brew install aaaa777/anytun
+brew install anytun
 ```
 
 # Config
