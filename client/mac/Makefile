@@ -2,7 +2,7 @@ CONFIG_DIR :=
 TEMPLATE_CONFIG_DIR := ../configs/anytun
 
 # for brew install
-tarball-src: .FORCE clean build-directory Anytun.hosts BypassDomains.txt client-config.json
+tarball-src: .FORCE Anytun.hosts BypassDomains.txt client-config.json
 	@tar -czvf build/tarball-src.tar.gz \
 		src/anytun.sh \
 		src/anytund.sh \
@@ -12,7 +12,7 @@ tarball-src: .FORCE clean build-directory Anytun.hosts BypassDomains.txt client-
 		BypassDomains.txt \
 		client-config.json
 
-build: .FORCE clean build-directory anytun anytund Anytun.hosts BypassDomains.txt client-config.json
+build: .FORCE anytun anytund Anytun.hosts BypassDomains.txt client-config.json
 	@tar -czvf build/anytun.tar.gz \
 		-C build \
 		Anytun.hosts \
@@ -27,7 +27,7 @@ build-directory:
 	@echo "CONFIG_DIR: $(CONFIG_DIR)"
 	@echo "TEMPLATE_CONFIG_DIR: $(TEMPLATE_CONFIG_DIR)"
 
-anytun:
+anytun: build-directory
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
 	@echo "#!/bin/sh" > build/anytun
 	@cpp --traditional-cpp -C -P \
@@ -35,7 +35,7 @@ anytun:
 		src/anytun.sh 1>> build/anytun || echo 'built anytun'
 	@chmod +x build/anytun
 
-anytund:
+anytund: build-directory
 	@if [ -z $(CONFIG_DIR) ]; then echo "CONFIG_DIR is not set"; exit 1; fi
 	@echo "#!/bin/sh" > build/anytund
 	@cpp --traditional-cpp -C -P \
@@ -43,13 +43,13 @@ anytund:
 		src/anytund.sh 1>> build/anytund || echo 'built anytund'
 	@chmod +x build/anytund
 
-Anytun.hosts:
+Anytun.hosts: build-directory
 	@cp ${TEMPLATE_CONFIG_DIR}/Anytun.hosts build/
 
-BypassDomains.txt:
+BypassDomains.txt: build-directory
 	@cp ${TEMPLATE_CONFIG_DIR}/BypassDomains.txt build/
 
-client-config.json:
+client-config.json: build-directory
 	@cp ${TEMPLATE_CONFIG_DIR}/client-config.json build/
 
 install:
