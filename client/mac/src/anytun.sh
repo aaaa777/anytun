@@ -21,6 +21,14 @@ setup-route() {
     route add -net 198.18/16 198.19.0.1 -ifscope utun77
 }
 
+setup-dns() {
+  networksetup -setdnsservers Wi-Fi 127.0.77.53
+}
+
+reset-dns() {
+  networksetup -setdnsservers Wi-Fi Empty
+}
+
 setup-config() {
     mkdir -p "$TMP_CONFIG_DIR"
     build-v2ray-config > "$TMP_CONFIG_DIR/config.json"
@@ -48,7 +56,9 @@ get-anytun-bypass-domains() {
     cat $CONFIG_DIR/BypassDomains.txt | grep -v -e '^#' -e '^$' | uniq | tr '\n' ' '
 }
 
-
+get-anytun-lan-root-dns() {
+    scutil --dns | grep 'nameserver\[[0-9]*\]' | awk '{print $3}' | head -n 1
+}
 
 build-v2ray-config() {
     jq -nc --argjson vnext "$(get-anytun-gateway-servers)" '
@@ -197,7 +207,10 @@ build-coredns-config() {
 . {
     bind 127.0.77.53
     forward . $LAN_ROOT_DNS
-    hosts $CONFIG_DIR/Anytun.hosts
+    hosts $CONFIG_DIR/Anytun.hosts {
+      ttl 10
+      fallthrough
+    }
     cache 600
     log
 }
@@ -221,9 +234,11 @@ main() {
             start-services
             # sleep 1
             setup-route
+            setup-dns
             ;;
         stop)
             echo "stopping anytun services"
+            reset-dns
             stop-services
             ;;
         add-server)
@@ -231,7 +246,7 @@ main() {
             USER_ID=$3
             ;;
         *)
-            echo "Usage: $0 {start|stop}"
+            echo "Usage: anytun {start|stop}"
             exit 1
             ;;
     esac

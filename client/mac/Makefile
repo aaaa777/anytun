@@ -1,5 +1,5 @@
 BREW_BUILD := 0
-CONFIG_DIR := /etc/anytun
+CONFIG_DIR := ./build
 TEMPLATE_CONFIG_DIR := ../configs/anytun
 ANYTUN_EXECUTABLE := anytun
 
